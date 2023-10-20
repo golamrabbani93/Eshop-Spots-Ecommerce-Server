@@ -9,24 +9,28 @@ const port = process.env.PORT || 5000;
 app.use(cors());
 app.use(express.json());
 dotenv.config();
-const database = () => {
+
+async function connectToDatabase() {
 	try {
-		mongoose
-			.connect(process.env.EShopSpots_database_srv, {
-				dbName: 'E-ShopSpots',
-				family: 4,
-			})
-			.then(() => {
-				console.log('database Connected');
-			})
-			.catch((err) => {
-				console.log(err);
-			});
+		//! MongoDB connection URI
+		const uri = process.env.EShopSpots_database_srv;
+		const options = {
+			useNewUrlParser: true,
+			useUnifiedTopology: true,
+			dbName: 'E-ShopSpots',
+		};
+		//! Connect to MongoDB using Mongoose
+		await mongoose.connect(uri, options);
+
+		console.log('Connected to MongoDB');
 	} catch (error) {
-		console.log(error);
+		//! Handle connection error
+		console.error('Error connecting to MongoDB:', error.message);
 	}
-};
-database();
+}
+
+//! Call the function to connect to the database
+connectToDatabase();
 // !Routes
 const handleProducts = require('./routes/handleProducts');
 
