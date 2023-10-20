@@ -39,3 +39,4 @@ const ProductsSchema = new mongoose.Schema({
 		required: true,
 	},
 });
+module.exports = ProductsSchema;

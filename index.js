@@ -32,9 +32,11 @@ async function connectToDatabase() {
 //! Call the function to connect to the database
 connectToDatabase();
 // !Routes
-const handleProducts = require('./routes/handleProducts');
+const handleProducts = require('./routes/HandleProducts');
+const handleUser = require('./routes/HandleUser');
 
 app.use('/products', handleProducts);
+app.use('/user', handleUser);
 
 app.get('/', (req, res) => {
 	res.send('eshopspots-sever');
