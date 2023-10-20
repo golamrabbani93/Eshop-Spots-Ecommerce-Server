@@ -9,11 +9,10 @@ const port = process.env.PORT || 5000;
 app.use(cors());
 app.use(express.json());
 dotenv.config();
-console.log(process.env.EShopSpots_databse_srv);
 const database = () => {
 	try {
 		mongoose
-			.connect(process.env.EShopSpots_databse_srv, {
+			.connect(process.env.EShopSpots_database_srv, {
 				dbName: 'E-ShopSpots',
 				family: 4,
 			})
@@ -29,9 +28,9 @@ const database = () => {
 };
 database();
 // !Routes
-// const NewArrivalProduct = require('./routes/NewArrivalProduct');
+const handleProducts = require('./routes/handleProducts');
 
-app.use('/new-arrival-product', NewArrivalProduct);
+app.use('/products', handleProducts);
 
 app.get('/', (req, res) => {
 	res.send('eshopspots-sever');
