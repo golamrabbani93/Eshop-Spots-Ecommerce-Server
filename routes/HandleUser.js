@@ -4,7 +4,6 @@ const router = express.Router();
 
 // !import  Schema
 const UserSchema = require('../schemas/UserSchema');
-const e = require('express');
 
 // !create User Collection
 const userCollection = mongoose.model('User', UserSchema);

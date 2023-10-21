@@ -34,9 +34,11 @@ connectToDatabase();
 // !Routes
 const handleProducts = require('./routes/HandleProducts');
 const handleUser = require('./routes/HandleUser');
+const handleBooking = require('./routes/HandleBooking');
 
 app.use('/products', handleProducts);
 app.use('/user', handleUser);
+app.use('/booking', handleBooking);
 
 app.get('/', (req, res) => {
 	res.send('eshopspots-sever');
