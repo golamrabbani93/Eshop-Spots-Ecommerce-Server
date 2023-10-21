@@ -9,6 +9,18 @@ const UserSchema = mongoose.Schema({
 		type: String,
 		required: true,
 	},
+	phone: {
+		type: String,
+	},
+	country: {
+		type: String,
+	},
+	townCity: {
+		type: String,
+	},
+	street: {
+		type: String,
+	},
 });
 
 module.exports = UserSchema;
