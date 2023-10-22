@@ -35,10 +35,12 @@ connectToDatabase();
 const handleProducts = require('./routes/HandleProducts');
 const handleUser = require('./routes/HandleUser');
 const handleBooking = require('./routes/HandleBooking');
+const handlePayment = require('./routes/HandlePayment');
 
 app.use('/products', handleProducts);
 app.use('/user', handleUser);
 app.use('/booking', handleBooking);
+app.use('/payment', handlePayment);
 
 app.get('/', (req, res) => {
 	res.send('eshopspots-sever');
