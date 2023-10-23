@@ -36,6 +36,9 @@ const BookingSchema = new mongoose.Schema({
 		type: Number,
 		required: true,
 	},
+	paymentStatus: {
+		type: String,
+	},
 });
 
 module.exports = BookingSchema;
