@@ -36,11 +36,13 @@ const handleProducts = require('./routes/HandleProducts');
 const handleUser = require('./routes/HandleUser');
 const handleBooking = require('./routes/HandleBooking');
 const handlePayment = require('./routes/HandlePayment');
+const handleCategory = require('./routes/HandleCategory');
 
 app.use('/products', handleProducts);
 app.use('/user', handleUser);
 app.use('/booking', handleBooking);
 app.use('/payment', handlePayment);
+app.use('/category', handleCategory);
 
 app.get('/', (req, res) => {
 	res.send('eshopspots-sever');
