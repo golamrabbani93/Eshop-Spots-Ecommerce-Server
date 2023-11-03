@@ -9,7 +9,22 @@ const CategorySchema = require('../schemas/CategorySchema');
 const categoryCollection = new mongoose.model('Category', CategorySchema);
 
 router.get('/', async (req, res) => {
-	res.send('hello from categories');
+	try {
+		const categories = await categoryCollection.find();
+		if (categories.length > 0) {
+			res.status(200).json({
+				message: 'success',
+				data: categories.reverse(),
+			});
+		} else {
+			res.status(404).json({
+				message: 'Not Found',
+				data: 0,
+			});
+		}
+	} catch (error) {
+		res.status(500).json({message: 'there is an error in server'});
+	}
 });
 
 module.exports = router;
