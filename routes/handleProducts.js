@@ -7,7 +7,7 @@ const ProductSchema = require('../schemas/ProductsSchema');
 
 // !create NewArrivalProducts Collection
 const productsCollection = new mongoose.model('Product', ProductSchema);
-router.get('/', async (req, res, next) => {
+router.get('/', async (req, res) => {
 	try {
 		const query = req.query;
 		// !get only new arrival products
@@ -18,67 +18,66 @@ router.get('/', async (req, res, next) => {
 					message: 'success',
 					data: newArrivalProducts,
 				});
+				return;
 			} else {
-				res.status(404).json({
+				return res.status(404).json({
 					message: 'Not Found',
 					data: 0,
 				});
 			}
-		} else {
-			next();
 		}
 		// !get best seller products
 		if (query.bestSeller) {
 			const bestSeller = await productsCollection.find({best_seller: true});
 			if (bestSeller.length > 0) {
-				res.status(200).json({
+				return res.status(200).json({
 					message: 'success',
 					data: bestSeller,
 				});
 			} else {
-				res.status(404).json({
+				return res.status(404).json({
 					message: 'Not Found',
 					data: 0,
 				});
 			}
-		} else {
-			next();
 		}
+		// !get all products
 		const allProducts = await productsCollection.find();
 		if (allProducts.length > 0) {
-			res.status(200).json({
+			return res.status(200).json({
 				message: 'success',
 				data: allProducts,
 			});
 		} else {
-			res.status(404).json({
+			return res.status(404).json({
 				message: 'Not Found',
 				data: 0,
 			});
 		}
 	} catch (error) {
-		res.status(500).json({message: 'there is an error in server'});
+		return res.status(500).json({message: 'there is an error in server'});
 	}
 });
 
+// !get single peroduct by product id
 router.get('/:id', async (req, res) => {
 	try {
 		const id = req.params.id;
 		const productQuery = {_id: id};
 		const product = await productsCollection.findOne(productQuery);
 		if (product._id) {
-			res.status(200).json({
+			return res.status(200).json({
 				message: 'success',
 				data: product,
 			});
 		} else {
-			res.status(404).json({
+			return res.status(404).json({
 				message: 'Not Found',
 				data: 0,
 			});
 		}
 	} catch (error) {
-		res.status(500).json({message: 'there is an error in server'});
+		return res.status(500).json({message: 'there is an error in server'});
 	}
 });
 
