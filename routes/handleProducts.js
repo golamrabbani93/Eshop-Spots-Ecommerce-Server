@@ -27,11 +27,11 @@ router.get('/', async (req, res) => {
 		}
 		// !get best seller products
 		if (query.bestSeller) {
-			const newArrivalProducts = await productsCollection.find({best_seller: true});
-			if (newArrivalProducts.length > 0) {
+			const bestSeller = await productsCollection.find({best_seller: true});
+			if (bestSeller.length > 0) {
 				res.status(200).json({
 					message: 'success',
-					data: newArrivalProducts,
+					data: bestSeller,
 				});
 			} else {
 				res.status(404).json({
@@ -40,11 +40,11 @@ router.get('/', async (req, res) => {
 				});
 			}
 		}
-		const newArrivalProducts = await productsCollection.find();
-		if (newArrivalProducts.length > 0) {
+		const allProducts = await productsCollection.find();
+		if (allProducts.length > 0) {
 			res.status(200).json({
 				message: 'success',
-				data: newArrivalProducts,
+				data: allProducts,
 			});
 		} else {
 			res.status(404).json({
