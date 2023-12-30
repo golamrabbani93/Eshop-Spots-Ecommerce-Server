@@ -7,7 +7,7 @@ const ProductSchema = require('../schemas/ProductsSchema');
 
 // !create NewArrivalProducts Collection
 const productsCollection = new mongoose.model('Product', ProductSchema);
-router.get('/', async (req, res) => {
+router.get('/', async (req, res, next) => {
 	try {
 		const query = req.query;
 		// !get only new arrival products
@@ -24,6 +24,8 @@ router.get('/', async (req, res) => {
 					data: 0,
 				});
 			}
+		} else {
+			next();
 		}
 		// !get best seller products
 		if (query.bestSeller) {
@@ -39,6 +41,8 @@ router.get('/', async (req, res) => {
 					data: 0,
 				});
 			}
+		} else {
+			next();
 		}
 		const allProducts = await productsCollection.find();
 		if (allProducts.length > 0) {
