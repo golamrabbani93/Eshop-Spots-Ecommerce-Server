@@ -10,7 +10,7 @@ const categoryCollection = new mongoose.model('Category', CategorySchema);
 
 router.get('/', async (req, res) => {
 	try {
-		const categories = await categoryCollection.find();
+		const categories = await categoryCollection.find().sort({name: -1});
 		if (categories.length > 0) {
 			res.status(200).json({
 				message: 'success',

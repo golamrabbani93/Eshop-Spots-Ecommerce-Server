@@ -42,7 +42,7 @@ router.get('/', async (req, res) => {
 			}
 		}
 		// !get Category  products with category name
-		if (query.categoryName !== 'undefined') {
+		if (query.categoryName !== 'undefined' && Object.keys(query).length !== 0) {
 			const categoryProduct = await productsCollection.find({category_name: query.categoryName});
 			if (categoryProduct.length > 0) {
 				return res.status(200).json({
