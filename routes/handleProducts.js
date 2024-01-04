@@ -41,6 +41,21 @@ router.get('/', async (req, res) => {
 				});
 			}
 		}
+		// !get Category  products with category name
+		if (query.categoryName !== 'undefined') {
+			const categoryProduct = await productsCollection.find({category_name: query.categoryName});
+			if (categoryProduct.length > 0) {
+				return res.status(200).json({
+					message: 'success',
+					data: categoryProduct,
+				});
+			} else {
+				return res.status(404).json({
+					message: 'Not Found',
+					data: 0,
+				});
+			}
+		}
 		// !get all products
 		const allProducts = await productsCollection.find();
 		if (allProducts.length > 0) {
