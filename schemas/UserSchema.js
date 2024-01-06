@@ -9,6 +9,10 @@ const UserSchema = mongoose.Schema({
 		type: String,
 		required: true,
 	},
+	userRole: {
+		type: String,
+		required: true,
+	},
 	phone: {
 		type: String,
 	},
