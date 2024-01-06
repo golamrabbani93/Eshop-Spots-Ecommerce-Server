@@ -11,6 +11,9 @@ const bookingCollection = mongoose.model('Booking', BookingSchema);
 const userCollection = mongoose.model('User', UserSchema);
 
 router.get('/', async (req, res) => {});
+
+// !get single booking data with booking id
+
 router.get('/:id', async (req, res) => {
 	try {
 		const id = req.params.id;
@@ -33,6 +36,30 @@ router.get('/:id', async (req, res) => {
 		});
 	}
 });
+// !get all booking data with user email
+router.get('/all/:email', async (req, res) => {
+	try {
+		const email = req.params.email;
+		const bookingQuery = {email: email};
+		const booking = await bookingCollection.find(bookingQuery);
+		if (booking.length > 0) {
+			res.status(200).json({
+				message: 'success',
+				data: booking,
+			});
+		} else {
+			res.status(404).json({
+				message: 'Not Found',
+				data: 0,
+			});
+		}
+	} catch (error) {
+		res.status(500).json({
+			message: 'there is an error in server',
+		});
+	}
+});
+
 router.post('/', async (req, res) => {
 	try {
 		const bookingData = req.body;
