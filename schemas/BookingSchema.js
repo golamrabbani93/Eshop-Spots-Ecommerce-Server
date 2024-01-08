@@ -39,6 +39,10 @@ const BookingSchema = new mongoose.Schema({
 	paymentStatus: {
 		type: String,
 	},
+	date: {
+		type: String,
+		required: true,
+	},
 });
 
 module.exports = BookingSchema;
