@@ -5,10 +5,12 @@ const router = express.Router();
 // !import  Schema
 const BookingSchema = require('../schemas/BookingSchema');
 const UserSchema = require('../schemas/UserSchema');
+const ProductSchema = require('../schemas/ProductsSchema');
 
 // !create User Collection
-const bookingCollection = mongoose.model('Booking', BookingSchema);
-const userCollection = mongoose.model('User', UserSchema);
+const bookingCollection = new mongoose.model('Booking', BookingSchema);
+const userCollection = new mongoose.model('User', UserSchema);
+const productsCollection = new mongoose.model('Product', ProductSchema);
 
 router.get('/', async (req, res) => {});
 
@@ -46,6 +48,30 @@ router.get('/all/:email', async (req, res) => {
 			res.status(200).json({
 				message: 'success',
 				data: booking,
+			});
+		} else {
+			res.status(404).json({
+				message: 'Not Found',
+				data: 0,
+			});
+		}
+	} catch (error) {
+		res.status(500).json({
+			message: 'there is an error in server',
+		});
+	}
+});
+// !get all booking products with product ids
+router.post('/products/all', async (req, res) => {
+	try {
+		const ids = req.body;
+
+		const bookingQuery = {_id: {$in: ids}};
+		const bookingProducts = await productsCollection.find(bookingQuery);
+		if (bookingProducts.length > 0) {
+			res.status(200).json({
+				message: 'success',
+				data: bookingProducts,
 			});
 		} else {
 			res.status(404).json({
