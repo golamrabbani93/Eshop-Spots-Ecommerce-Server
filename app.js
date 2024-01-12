@@ -32,13 +32,13 @@ async function connectToDatabase() {
 //! Call the function to connect to the database
 connectToDatabase();
 // // !Routes
-// const handleProducts = require('./routes/handleProducts');
+const handleProducts = require('./routes/handleProduct');
 const handleUser = require('./routes/HandleUser');
 const handleBooking = require('./routes/HandleBooking');
 const handlePayment = require('./routes/HandlePayment');
 const handleCategory = require('./routes/HandleCategory');
 
-// app.use('/products', handleProducts);
+app.use('/products', handleProducts);
 app.use('/user', handleUser);
 app.use('/booking', handleBooking);
 app.use('/payment', handlePayment);
