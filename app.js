@@ -45,7 +45,7 @@ app.use('/payment', handlePayment);
 app.use('/category', handleCategory);
 
 app.get('/', (req, res) => {
-	res.send('eshopspots-sever');
+	res.send('Eshopspots-Sever is Running');
 });
 
 app.listen(port, () => {
