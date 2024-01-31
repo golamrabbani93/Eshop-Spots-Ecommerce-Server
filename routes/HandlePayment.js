@@ -9,10 +9,12 @@ const stripe = require('stripe')(STRIPE_SECRET_KEY);
 // !import  Schema
 const PaymentSchema = require('../schemas/PaymentSchema');
 const BookingSchema = require('../schemas/BookingSchema');
+const ProductSchema = require('../schemas/ProductsSchema');
 
 // !create Payment Collection
 const paymentCollection = mongoose.model('Payment', PaymentSchema);
 const bookingCollection = mongoose.model('Booking', BookingSchema);
+const productCollection = mongoose.model('Product', ProductSchema);
 router.get('/', async (req, res) => {
 	res.send('payment route');
 });
@@ -20,7 +22,8 @@ router.get('/', async (req, res) => {
 router.post('/', async (req, res) => {
 	try {
 		const paymentData = req.body;
-		const {bookingId} = paymentData;
+		// !get booking id and products from payment data
+		const {bookingId, products} = paymentData;
 		// !update payment status in booking collection
 		const bookingQuery = {_id: bookingId};
 		const bookingUpdateData = {
@@ -43,6 +46,21 @@ router.post('/', async (req, res) => {
 				});
 			}
 		}
+		// !update product sold and stock
+		products.map(async (product) => {
+			// !find product by id
+			const productQuery = {_id: product._id};
+			const productData = await productCollection.findOne(productQuery);
+
+			const updateData = {
+				$set: {
+					sold: productData.sold + product.quantity,
+					stock: productData.stock - product.quantity,
+				},
+			};
+			// !update product sold
+			await productCollection.updateOne(productQuery, updateData);
+		});
 	} catch (error) {
 		res.status(500).json({message: 'there is an error in server'});
 	}

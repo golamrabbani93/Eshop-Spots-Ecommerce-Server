@@ -28,6 +28,9 @@ const ProductsSchema = new mongoose.Schema({
 		type: Number,
 		required: true,
 	},
+	sold: {
+		type: Number,
+	},
 	status: {
 		type: String,
 	},
