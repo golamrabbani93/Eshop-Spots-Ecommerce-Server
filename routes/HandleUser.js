@@ -30,6 +30,35 @@ router.get('/', async (req, res) => {
 		return res.status(500).json({message: 'there is an error in server'});
 	}
 });
+// !Update user Details Data in database
+router.put('/:id', async (req, res) => {
+	try {
+		const userId = req.params.id;
+		const userData = req.body;
+		const updateData = {
+			$set: {
+				phone: userData.phone,
+				street: userData.street,
+				townCity: userData.townCity,
+				country: userData.country,
+			},
+		};
+		// !update user data
+		const updatedUser = await userCollection.updateOne({_id: userId}, updateData);
+		if (updatedUser.acknowledged === true && updatedUser.modifiedCount > 0) {
+			return res.status(200).json({
+				message: 'Update success',
+				user: updatedUser,
+			});
+		} else {
+			return res.status(404).json({
+				message: 'Update Unsuccess',
+			});
+		}
+	} catch (error) {
+		return res.status(500).json({message: 'there is an error in server'});
+	}
+});
 router.post('/', async (req, res) => {
 	try {
 		const userdata = req.body;
