@@ -157,4 +157,24 @@ router.put('/update/:id', async (req, res) => {
 	}
 });
 
+// !Delete Booking data
+router.delete('/:id', async (req, res) => {
+	try {
+		const id = req.params.id;
+		const deleteBooking = await bookingCollection.deleteOne({_id: id});
+		if (deleteBooking.deletedCount > 0) {
+			res.status(200).json({
+				message: 'success',
+				data: deleteBooking,
+			});
+		} else {
+			res.status(404).json({
+				message: 'Not Found',
+			});
+		}
+	} catch (error) {
+		return res.status(500).json({message: 'there is an error in server'});
+	}
+});
+
 module.exports = router;
