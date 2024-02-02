@@ -129,5 +129,32 @@ router.post('/', async (req, res) => {
 		res.status(500).json({message: 'there is an error in server'});
 	}
 });
+// !update booking data
+router.put('/update/:id', async (req, res) => {
+	try {
+		const bookingId = req.params.id;
+		const bookingData = req.body;
+		const updateData = {
+			$set: {
+				products: bookingData.products,
+				total: bookingData.total,
+			},
+		};
+		// !update booking data
+		const updatedBooking = await bookingCollection.updateOne({_id: bookingId}, updateData);
+		if (updatedBooking.acknowledged) {
+			res.status(200).json({
+				message: 'success',
+				data: updatedBooking,
+			});
+		} else {
+			res.status(404).json({
+				message: 'Not Found',
+			});
+		}
+	} catch (error) {
+		return res.status(500).json({message: 'there is an error in server'});
+	}
+});
 
 module.exports = router;
