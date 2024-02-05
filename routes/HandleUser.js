@@ -74,6 +74,7 @@ router.put('/:id', async (req, res) => {
 		return res.status(500).json({message: 'there is an error in server'});
 	}
 });
+// !Create new user in database
 router.post('/', async (req, res) => {
 	try {
 		const userdata = req.body;
@@ -98,6 +99,31 @@ router.post('/', async (req, res) => {
 		}
 	} catch (error) {
 		res.status(500).json({message: 'there is an error in server'});
+	}
+});
+//! update user role to admin
+router.patch('/makeadmin/:id', async (req, res) => {
+	try {
+		const userId = req.params.id;
+		const updateData = {
+			$set: {
+				userRole: 'admin',
+			},
+		};
+		// !update user data
+		const updatedUser = await userCollection.updateOne({_id: userId}, updateData);
+		if (updatedUser.acknowledged === true && updatedUser.modifiedCount > 0) {
+			return res.status(200).json({
+				message: 'Update success',
+				user: updatedUser,
+			});
+		} else {
+			return res.status(404).json({
+				message: 'Update Unsuccess',
+			});
+		}
+	} catch (error) {
+		return res.status(500).json({message: 'there is an error in server'});
 	}
 });
 
