@@ -126,5 +126,23 @@ router.patch('/makeadmin/:id', async (req, res) => {
 		return res.status(500).json({message: 'there is an error in server'});
 	}
 });
-
+// !Delete user from database
+router.delete('/delete/:id', async (req, res) => {
+	try {
+		const userId = req.params.id;
+		const deletedUser = await userCollection.deleteOne({_id: userId});
+		if (deletedUser.acknowledged === true && deletedUser.deletedCount > 0) {
+			return res.status(200).json({
+				message: 'Delete success',
+				user: deletedUser,
+			});
+		} else {
+			return res.status(404).json({
+				message: 'Delete Unsuccess',
+			});
+		}
+	} catch (error) {
+		return res.status(500).json({message: 'there is an error in server'});
+	}
+});
 module.exports = router;
