@@ -12,7 +12,25 @@ const bookingCollection = new mongoose.model('Booking', BookingSchema);
 const userCollection = new mongoose.model('User', UserSchema);
 const productsCollection = new mongoose.model('Product', ProductSchema);
 
-router.get('/', async (req, res) => {});
+// !get all booking data
+router.get('/', async (req, res) => {
+	try {
+		const bookings = await bookingCollection.find().sort({_id: -1});
+		if (bookings.length > 0) {
+			res.status(200).json({
+				message: 'success',
+				data: bookings.reverse(),
+			});
+		} else {
+			res.status(404).json({
+				message: 'Not Found',
+				data: 0,
+			});
+		}
+	} catch (error) {
+		res.status(500).json({message: 'there is an error in server'});
+	}
+});
 
 // !get single booking data with booking id
 
