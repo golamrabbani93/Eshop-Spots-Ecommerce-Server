@@ -51,21 +51,6 @@ app.get('/', (req, res) => {
 	res.send('Eshopspots-Sever is Running');
 });
 
-const io = new Server(httpServer, {
-	cors: {
-		origin: 'http://localhost:3000',
-	},
-});
-
-io.on('connection', (socket) => {
-	io.emit('test', 'Test Message');
-
-	// console.log('a user connected');
-	socket.on('disconnect', () => {
-		// console.log('user disconnected');
-	});
-});
-
 httpServer.listen(port, () => {
 	console.log(`Server is running on port: ${port}`);
 });
