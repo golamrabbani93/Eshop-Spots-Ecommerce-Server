@@ -5,7 +5,6 @@ const app = express();
 const http = require('http');
 const dotenv = require('dotenv');
 const port = process.env.PORT || 5000;
-const {Server} = require('socket.io');
 
 // !Middleware
 app.use(cors());
@@ -40,12 +39,14 @@ const handleUser = require('./routes/HandleUser');
 const handleBooking = require('./routes/HandleBooking');
 const handlePayment = require('./routes/HandlePayment');
 const handleCategory = require('./routes/HandleCategory');
+const handleNotification = require('./routes/HandleNotification');
 
 app.use('/products', handleProducts);
 app.use('/user', handleUser);
 app.use('/booking', handleBooking);
 app.use('/payment', handlePayment);
 app.use('/category', handleCategory);
+app.use('/notification', handleNotification);
 
 app.get('/', (req, res) => {
 	res.send('Eshopspots-Sever is Running');
