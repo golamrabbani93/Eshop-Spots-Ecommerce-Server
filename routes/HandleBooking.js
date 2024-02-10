@@ -11,6 +11,7 @@ const ProductSchema = require('../schemas/ProductsSchema');
 const bookingCollection = new mongoose.model('Booking', BookingSchema);
 const userCollection = new mongoose.model('User', UserSchema);
 const productsCollection = new mongoose.model('Product', ProductSchema);
+const notificationCollection = new mongoose.model('Notification', BookingSchema);
 
 // !get all booking data
 router.get('/', async (req, res) => {
@@ -128,8 +129,10 @@ router.post('/', async (req, res) => {
 			if (updatedUser.acknowledged) {
 				// !save booking data in database if user update success
 				const booking = new bookingCollection(bookingData);
+				const notification = new notificationCollection(bookingData);
 				const savedBooking = await booking.save();
 				if (savedBooking._id) {
+					await notification.save();
 					res.status(200).json({
 						message: 'success',
 						bookingId: savedBooking._id,
