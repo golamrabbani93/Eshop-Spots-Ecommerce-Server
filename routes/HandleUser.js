@@ -7,8 +7,11 @@ const UserSchema = require('../schemas/UserSchema');
 
 // !create User Collection
 const userCollection = mongoose.model('User', UserSchema);
+// !Middleware
+const verifyJwt = require('../middlewares/VerifyJWT');
 
-router.get('/', async (req, res) => {
+//! get user details from database
+router.get('/', verifyJwt, async (req, res) => {
 	try {
 		//* get email from client side
 		const userEmail = req.query.email;
