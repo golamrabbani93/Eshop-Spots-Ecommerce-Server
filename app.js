@@ -40,6 +40,7 @@ const handleBooking = require('./routes/HandleBooking');
 const handlePayment = require('./routes/HandlePayment');
 const handleCategory = require('./routes/HandleCategory');
 const handleNotification = require('./routes/HandleNotification');
+const handleJWT = require('./routes/HandleJWT');
 
 app.use('/products', handleProducts);
 app.use('/user', handleUser);
@@ -47,6 +48,7 @@ app.use('/booking', handleBooking);
 app.use('/payment', handlePayment);
 app.use('/category', handleCategory);
 app.use('/notification', handleNotification);
+app.use('/jwt', handleJWT);
 
 app.get('/', (req, res) => {
 	res.send('Eshopspots-Sever is Running');
