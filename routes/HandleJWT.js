@@ -16,9 +16,15 @@ router.get('/', async (req, res) => {
 		const user = await userCollection.findOne(query);
 		if (user._id) {
 			const token = jwt.sign({UserEmail}, Token, {expiresIn: '1d'});
-			return res.send({accessToken: token});
+			res.status(200).send({
+				message: 'Token Generated',
+				token: token,
+			});
+		} else {
+			res.status(404).send({
+				message: 'Token Generated Faild',
+			});
 		}
-		res.status(403).send({accessToken: ''});
 	} catch (error) {
 		res.status(500).json({message: 'there is an error in server'});
 	}
