@@ -10,6 +10,7 @@ const productsCollection = new mongoose.model('Product', ProductSchema);
 router.get('/', async (req, res) => {
 	try {
 		const query = req.query;
+		const {page, limit} = req.query;
 		// !get only new arrival products
 		if (query.status) {
 			const newArrivalProducts = await productsCollection.find(query);
@@ -43,11 +44,18 @@ router.get('/', async (req, res) => {
 		}
 		// !get Category  products with category name
 		if (query.categoryName !== 'undefined' && Object.keys(query).length !== 0) {
-			const categoryProduct = await productsCollection.find({category_name: query.categoryName});
+			const categoryProduct = await productsCollection
+				.find({category_name: query.categoryName})
+				.skip(parseInt(page) * parseInt(limit))
+				.limit(parseInt(limit));
+			const productCount = await productsCollection
+				.find({category_name: query.categoryName})
+				.countDocuments();
 			if (categoryProduct.length > 0) {
 				return res.status(200).json({
 					message: 'success',
 					data: categoryProduct,
+					total: productCount,
 				});
 			} else {
 				return res.status(404).json({
@@ -57,11 +65,16 @@ router.get('/', async (req, res) => {
 			}
 		}
 		// !get all products
-		const allProducts = await productsCollection.find();
+		const allProducts = await productsCollection
+			.find()
+			.skip(parseInt(page) * parseInt(limit))
+			.limit(parseInt(limit));
+		const productCount = await productsCollection.find().estimatedDocumentCount();
 		if (allProducts.length > 0) {
 			return res.status(200).json({
 				message: 'success',
 				data: allProducts,
+				total: productCount,
 			});
 		} else {
 			return res.status(404).json({
