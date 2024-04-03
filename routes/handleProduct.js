@@ -10,7 +10,7 @@ const productsCollection = new mongoose.model('Product', ProductSchema);
 router.get('/', async (req, res) => {
 	try {
 		const query = req.query;
-		const {page, limit} = req.query;
+		const {page, limit, minPrice, maxPrice} = req.query;
 		// !get only new arrival products
 		if (query.status) {
 			const newArrivalProducts = await productsCollection.find(query);
@@ -44,32 +44,53 @@ router.get('/', async (req, res) => {
 		}
 		// !get Category  products with category name
 		if (query.categoryName !== 'undefined' && Object.keys(query).length !== 0) {
-			const categoryProduct = await productsCollection
-				.find({category_name: query.categoryName})
-				.skip(parseInt(page) * parseInt(limit))
-				.limit(parseInt(limit));
 			const productCount = await productsCollection
-				.find({category_name: query.categoryName})
+				.find({category_name: query.categoryName, main_price: {$gte: minPrice, $lte: maxPrice}})
 				.countDocuments();
-			if (categoryProduct.length > 0) {
-				return res.status(200).json({
-					message: 'success',
-					data: categoryProduct,
-					total: productCount,
-				});
+			if (productCount > limit) {
+				const categoryProduct = await productsCollection
+					.find({category_name: query.categoryName, main_price: {$gte: minPrice, $lte: maxPrice}})
+					.skip(parseInt(page) * parseInt(limit))
+					.limit(parseInt(limit));
+				if (categoryProduct.length > 0) {
+					return res.status(200).json({
+						message: 'success',
+						data: categoryProduct,
+						total: productCount,
+					});
+				} else {
+					return res.status(404).json({
+						message: 'Not Found',
+						data: 0,
+					});
+				}
 			} else {
-				return res.status(404).json({
-					message: 'Not Found',
-					data: 0,
+				const categoryProduct = await productsCollection.find({
+					category_name: query.categoryName,
+					main_price: {$gte: minPrice, $lte: maxPrice},
 				});
+				if (categoryProduct.length > 0) {
+					return res.status(200).json({
+						message: 'success',
+						data: categoryProduct,
+						total: productCount,
+					});
+				} else {
+					return res.status(404).json({
+						message: 'Not Found',
+						data: 0,
+					});
+				}
 			}
 		}
 		// !get all products
 		const allProducts = await productsCollection
-			.find()
+			.find({main_price: {$gte: minPrice, $lte: maxPrice}})
 			.skip(parseInt(page) * parseInt(limit))
 			.limit(parseInt(limit));
-		const productCount = await productsCollection.find().estimatedDocumentCount();
+		const productCount = await productsCollection
+			.find({main_price: {$gte: minPrice, $lte: maxPrice}})
+			.countDocuments();
 		if (allProducts.length > 0) {
 			return res.status(200).json({
 				message: 'success',
